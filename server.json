@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "studio.kynth/core",
+  "description": "Documents to schema-valid JSON plus 38 more finished-job AI tools, on one credit wallet.",
+  "websiteUrl": "https://api.kynth.studio",
+  "version": "0.3.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@kynth/api-mcp",
+      "version": "0.3.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "KYNTH_API_KEY",
+          "description": "Your Kynth Core API key (ksk_live_…). Free at api.kynth.studio/dashboard — 500 credits monthly, no card.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

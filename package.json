@@ -1,0 +1,61 @@
+{
+  "name": "@kynth/api-mcp",
+  "version": "0.3.1",
+  "description": "MCP server for Kynth Core — gives Claude, Cursor, and any MCP client native tools to parse documents, extract fields, redact PII, analyze contracts, fight chargebacks, and enrich companies.",
+  "keywords": [
+    "kynth",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "cursor",
+    "tools",
+    "invoice-ocr",
+    "pdf-extraction",
+    "document-parsing",
+    "receipt-ocr",
+    "bank-statement-parser",
+    "invoice-api",
+    "quickbooks",
+    "chargeback",
+    "pii-redaction",
+    "json-extraction"
+  ],
+  "homepage": "https://api.kynth.studio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyisaiah47/kynth-core-mcp.git"
+  },
+  "license": "MIT",
+  "author": "Kynth Studios",
+  "type": "module",
+  "bin": {
+    "kynth-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@kynth/api": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5"
+  },
+  "mcpName": "studio.kynth/core"
+}
