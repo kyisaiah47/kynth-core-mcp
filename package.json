@@ -1,7 +1,7 @@
 {
   "name": "@kynth/api-mcp",
   "version": "0.5.0",
-  "description": "MCP server for Kynth Core — gives Claude, Cursor, and any MCP client native tools to parse documents, extract fields, redact PII, analyze contracts, fight chargebacks, and enrich companies.",
+  "description": "MCP server for ParseRail \u2014 gives Claude, Cursor, and any MCP client native tools to parse documents, extract fields, redact PII, analyze contracts, fight chargebacks, and enrich companies.",
   "keywords": [
     "kynth",
     "mcp",

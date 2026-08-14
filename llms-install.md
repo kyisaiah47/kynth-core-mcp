@@ -1,6 +1,6 @@
-# Installing the Kynth Core MCP server
+# Installing the ParseRail MCP server
 
-Kynth Core is a documents-to-JSON + finished-job AI toolkit (39 endpoints: invoice/receipt/statement extraction, contract analysis, PII redaction, chargeback evidence, research, and more) billed per successful task from one credit wallet.
+ParseRail is a documents-to-JSON + finished-job AI toolkit (39 endpoints: invoice/receipt/statement extraction, contract analysis, PII redaction, chargeback evidence, research, and more) billed per successful task from one credit wallet.
 
 ## 1. Get an API key
 

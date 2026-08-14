@@ -16,7 +16,7 @@
       "environmentVariables": [
         {
           "name": "KYNTH_API_KEY",
-          "description": "Your Kynth Core API key (ksk_live_…). Free at api.kynth.studio/dashboard — 500 credits monthly, no card.",
+          "description": "Your ParseRail API key (ksk_live_…). Free at api.kynth.studio/dashboard — 500 credits monthly, no card.",
           "isRequired": true,
           "isSecret": true
         }

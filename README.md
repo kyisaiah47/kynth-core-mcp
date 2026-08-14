@@ -1,6 +1,6 @@
 # @kynth/api-mcp
 
-An [MCP](https://modelcontextprotocol.io) server for **[Kynth Core](https://api.kynth.studio)** — gives Claude, Cursor, and any Model Context Protocol client native tools to parse documents, extract fields, redact PII, analyze contracts, fight chargebacks, and enrich companies.
+An [MCP](https://modelcontextprotocol.io) server for **[ParseRail](https://api.kynth.studio)** — gives Claude, Cursor, and any Model Context Protocol client native tools to parse documents, extract fields, redact PII, analyze contracts, fight chargebacks, and enrich companies.
 
 ## Setup
 
