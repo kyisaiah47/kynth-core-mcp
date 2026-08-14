@@ -1,7 +1,7 @@
 {
   "identifier": "kyisaiah47-kynth-core",
   "name": "ParseRail",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "author": "Kynth Studios",
   "homepage": "https://api.kynth.studio",
   "cloudEndpoint": "https://api.kynth.studio/mcp",
@@ -17,5 +17,1562 @@
     "contract-review",
     "json-extraction",
     "agent-tools"
-  ]
+  ],
+  "tools": [
+    {
+      "name": "kynth_parse",
+      "title": "Document parse",
+      "description": "Any invoice, receipt, EOB, ERA, or COI — PDF or image — into structured, validated JSON. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          },
+          "docType": {
+            "type": "string",
+            "description": "Optional hint, e.g. \"invoice\"."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_extract",
+      "title": "Field extraction",
+      "description": "Pull a field set you define out of any block of text. You name the fields; you get typed values with confidence. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The field names to pull out."
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Optional extra guidance."
+          }
+        },
+        "required": [
+          "text",
+          "fields"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_classify",
+      "title": "Classification",
+      "description": "Route or tag text against your own taxonomy — a label, a confidence, and a one-line rationale. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "multi": {
+            "type": "boolean",
+            "description": "Allow multiple labels."
+          },
+          "instructions": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "labels"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_summarize",
+      "title": "Summarize",
+      "description": "A meeting transcript, thread, or report → a tight summary, key points, and extracted action items. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "length": {
+            "type": "string",
+            "enum": [
+              "brief",
+              "standard",
+              "detailed"
+            ]
+          },
+          "actionItems": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_redact",
+      "title": "PII redaction",
+      "description": "Detect and strip names, emails, phones, SSNs, cards, and PHI from text before you store or log it. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Entity types to redact; omit for all."
+          },
+          "placeholder": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_sentiment",
+      "title": "Sentiment",
+      "description": "Turn a review or support message into a sentiment score, per-aspect breakdown, and the themes driving it. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "aspects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional aspects to break out."
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_contract",
+      "title": "Contract analysis",
+      "description": "A contract → parties, effective date, term, renewal, governing law, obligations, and flagged risk clauses. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_chargeback",
+      "title": "Chargeback representment",
+      "description": "Dispute details → a representment narrative, an evidence checklist, the right reason code, and a win-likelihood. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "The cardholder's dispute reason."
+          },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "descriptor": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "context": {
+            "type": "string"
+          },
+          "network": {
+            "type": "string",
+            "enum": [
+              "visa",
+              "mastercard",
+              "amex",
+              "discover"
+            ]
+          }
+        },
+        "required": [
+          "reason",
+          "transaction"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_enrich",
+      "title": "Company enrichment",
+      "description": "A domain or work email → a structured company profile: name, description, industry, HQ, size, and links. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_invoice",
+      "title": "Invoice extraction",
+      "description": "An invoice — PDF, photo, or text — into vendor, dates, PO refs, tax, totals, and clean line items. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_receipt",
+      "title": "Receipt extraction",
+      "description": "A receipt into merchant, items, totals, payment method, and an expense category — built for expense flows. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_statement",
+      "title": "Statement parsing",
+      "description": "A bank or card statement into the account, the period, balances, and every transaction as a normalized row. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_resume",
+      "title": "Resume parsing",
+      "description": "A resume or CV into a structured candidate profile: contact, skills, experience, education, and links. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_tables",
+      "title": "Table extraction",
+      "description": "Every table in a document — even scanned — as clean headers and rows, ready for your spreadsheet or DB. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_split",
+      "title": "Document splitting",
+      "description": "A multi-document scan bundle classified and split: what each document is, where it starts and ends, and a summary. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to a PDF or image."
+          },
+          "text": {
+            "type": "string",
+            "description": "Raw text, if you already have it."
+          },
+          "fileBase64": {
+            "type": "string",
+            "description": "Base64-encoded file bytes (with fileMimeType)."
+          },
+          "fileMimeType": {
+            "type": "string",
+            "description": "MIME type for fileBase64, e.g. application/pdf."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_compare",
+      "title": "Document comparison",
+      "description": "Two versions of a contract or document → every material change, what it means, and the risk it carries. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64-encoded file bytes."
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "data",
+                  "mimeType"
+                ],
+                "additionalProperties": false,
+                "description": "Inline document."
+              },
+              "fileUrl": {
+                "type": "string",
+                "description": "Public URL to a PDF or image."
+              },
+              "text": {
+                "type": "string",
+                "description": "Raw text, if you already have it."
+              }
+            },
+            "additionalProperties": false,
+            "description": "The earlier version (file, fileUrl, or text)."
+          },
+          "b": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "description": "Base64-encoded file bytes."
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "data",
+                  "mimeType"
+                ],
+                "additionalProperties": false,
+                "description": "Inline document."
+              },
+              "fileUrl": {
+                "type": "string",
+                "description": "Public URL to a PDF or image."
+              },
+              "text": {
+                "type": "string",
+                "description": "Raw text, if you already have it."
+              }
+            },
+            "additionalProperties": false,
+            "description": "The later version (file, fileUrl, or text)."
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_structure",
+      "title": "Structure to your schema",
+      "description": "Any messy input — text, HTML, an email — plus YOUR JSON schema → output shaped to it, validated against your required fields and property types, with an automatic corrective retry and a `valid` flag. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Any messy input — text, HTML, an email, a JSON blob."
+          },
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false,
+            "description": "The JSON Schema the output must conform to."
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Optional extra guidance."
+          }
+        },
+        "required": [
+          "input",
+          "schema"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_normalize",
+      "title": "Record normalization",
+      "description": "A batch of messy records → clean canonical rows, with a change log of every fix (casing, formats, dedup-ready values). Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "description": "The messy records."
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Canonical field names to normalize into; omit to keep the input's fields."
+          },
+          "instructions": {
+            "type": "string",
+            "description": "House rules, e.g. \"US phone format, uppercase state codes\"."
+          }
+        },
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_match",
+      "title": "Entity matching",
+      "description": "Two record sets → which rows are the same real-world thing, with confidence and reasoning. Fuzzy names, typos, aliases handled. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "description": "First record set."
+          },
+          "b": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            },
+            "description": "Second record set."
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Fields that most identify an entity, e.g. [\"name\",\"email\"]."
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_categorize",
+      "title": "Batch categorization",
+      "description": "Up to a hundred items against your taxonomy in one call — products, transactions, tickets — each with a confidence. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The things to categorize."
+          },
+          "taxonomy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Your categories."
+          },
+          "multi": {
+            "type": "boolean",
+            "description": "Allow multiple categories per item."
+          },
+          "instructions": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "items",
+          "taxonomy"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_dunning",
+      "title": "Collections sequence",
+      "description": "An overdue invoice → a ready-to-send collection sequence, escalating at the right pace and tone for how late it is. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "invoice": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "dueDate": {
+                "type": "string",
+                "description": "YYYY-MM-DD."
+              },
+              "daysOverdue": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "amount"
+            ],
+            "additionalProperties": false
+          },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "history": {
+                "type": "string",
+                "description": "Payment history / relationship context."
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "friendly",
+              "firm",
+              "final"
+            ],
+            "description": "Where to start the escalation."
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "email",
+              "sms"
+            ]
+          },
+          "steps": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "invoice",
+          "customer"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_po_match",
+      "title": "3-way match",
+      "description": "Invoice vs purchase order vs receipt → matched, partial, or mismatched, with every discrepancy flagged and sized. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "invoice": {
+            "type": "string",
+            "description": "The invoice — structured JSON (e.g. /v1/invoice output) or raw text."
+          },
+          "purchaseOrder": {
+            "type": "string",
+            "description": "The PO — structured JSON or raw text."
+          },
+          "receipt": {
+            "type": "string",
+            "description": "Optional goods receipt / delivery note for a 3-way match."
+          },
+          "tolerancePct": {
+            "type": "number",
+            "description": "Price variance tolerance in percent (default 2)."
+          }
+        },
+        "required": [
+          "invoice",
+          "purchaseOrder"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_quote",
+      "title": "Quote builder",
+      "description": "A job description plus your rates → an itemized, professional quote with assumptions and scope notes spelled out. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string",
+            "description": "What the customer needs, in plain words."
+          },
+          "rates": {
+            "type": "string",
+            "description": "Your rate card / pricing rules, any format."
+          },
+          "pastQuotes": {
+            "type": "string",
+            "description": "Optional examples of quotes you've sent."
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_fraud_flag",
+      "title": "Fraud triage",
+      "description": "An order or transaction in context → a risk score, the signals driving it, and the checks worth running before you ship. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false,
+            "description": "The order/transaction: amount, email, addresses, IP, device, history — whatever you have."
+          },
+          "context": {
+            "type": "string",
+            "description": "Store context: typical order size, known patterns."
+          }
+        },
+        "required": [
+          "order"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_reply",
+      "title": "Reply drafting",
+      "description": "A customer thread plus your context → a ready-to-send reply in the right tone, with an internal note for the agent. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string",
+            "description": "The email/ticket thread, newest last."
+          },
+          "context": {
+            "type": "string",
+            "description": "Policies, KB extracts, account facts the reply may use."
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "professional",
+              "friendly",
+              "apologetic",
+              "firm"
+            ]
+          },
+          "goal": {
+            "type": "string",
+            "description": "What the reply should achieve, e.g. \"offer refund, keep them\"."
+          },
+          "senderName": {
+            "type": "string",
+            "description": "Sign-off name."
+          }
+        },
+        "required": [
+          "thread"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_triage",
+      "title": "Ticket triage",
+      "description": "A support ticket → priority, category, the team it belongs to, sentiment, SLA risk, and a suggested first response. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "string",
+            "description": "The ticket text (subject + body)."
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Your category set; omit for sensible defaults."
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Routable teams."
+          }
+        },
+        "required": [
+          "ticket"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_minutes",
+      "title": "Meeting minutes",
+      "description": "A meeting transcript → clean minutes: summary, decisions made, action items with owners, and open questions. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "transcript": {
+            "type": "string",
+            "description": "The meeting transcript."
+          },
+          "attendees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "transcript"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_outreach",
+      "title": "Outreach sequence",
+      "description": "An enriched lead plus what you sell → a personalized outreach sequence that references what actually makes them a fit. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lead": {
+            "type": "string",
+            "description": "Who you're writing to — an enriched profile (e.g. /v1/enrich output) or notes."
+          },
+          "product": {
+            "type": "string",
+            "description": "What you sell and the value proposition."
+          },
+          "sender": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "company": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "email",
+              "linkedin"
+            ]
+          },
+          "steps": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lead",
+          "product"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_review_reply",
+      "title": "Review response",
+      "description": "A customer review → a brand-safe public response, the issues to log, and whether it needs human escalation. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "review": {
+            "type": "string",
+            "description": "The customer review text."
+          },
+          "rating": {
+            "type": "number",
+            "description": "Star rating if known."
+          },
+          "business": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "voice": {
+                "type": "string",
+                "description": "Brand voice notes."
+              }
+            },
+            "additionalProperties": false
+          },
+          "resolution": {
+            "type": "string",
+            "description": "What you can offer, e.g. \"replacement or refund\"."
+          }
+        },
+        "required": [
+          "review"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_moderate",
+      "title": "Content moderation",
+      "description": "Text or an image against YOUR policy → allow, review, or block, with the categories and excerpts that drove the call. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "image": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "description": "Base64."
+              },
+              "mimeType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "data",
+              "mimeType"
+            ],
+            "additionalProperties": false
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string",
+            "description": "YOUR rules, plain words — e.g. \"no medical claims, no competitor names\". Adds to the safety baseline."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_rewrite",
+      "title": "Brand-voice rewrite",
+      "description": "Any copy → your brand voice. Describe the voice or paste a sample; get the rewrite and what changed. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "voice": {
+            "type": "string",
+            "description": "Describe the voice or paste a sample of it."
+          },
+          "goal": {
+            "type": "string",
+            "description": "e.g. \"tighter, more confident\"."
+          },
+          "audience": {
+            "type": "string"
+          },
+          "length": {
+            "type": "string",
+            "enum": [
+              "shorter",
+              "same",
+              "longer"
+            ]
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_product_copy",
+      "title": "Product copy",
+      "description": "Specs and an audience → listing-ready titles, bullets, a description, and SEO keywords — per channel. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "features": {
+                "type": "string",
+                "description": "Specs / features, any format."
+              },
+              "audience": {
+                "type": "string"
+              },
+              "keywords": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "amazon",
+              "shopify",
+              "generic"
+            ]
+          }
+        },
+        "required": [
+          "product"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_describe",
+      "title": "Image description",
+      "description": "An image → accessible alt text, a caption, tags, and any text found inside it. Accessibility and catalogs in one call. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "description": "Base64."
+              },
+              "mimeType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "data",
+              "mimeType"
+            ],
+            "additionalProperties": false
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "alt",
+              "caption",
+              "product",
+              "detailed"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_research",
+      "title": "Research brief",
+      "description": "A company or topic → a multi-source, citation-backed brief: what it is, what changed lately, and what matters. Real web work. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The company, topic, or question to research."
+          },
+          "focus": {
+            "type": "string",
+            "description": "What matters to you, e.g. \"pricing changes and funding\"."
+          },
+          "depth": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "deep"
+            ],
+            "description": "deep reads more sources."
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_screen",
+      "title": "Lead screening",
+      "description": "A lead plus your ICP criteria → a web-grounded qualification verdict with the evidence for and against. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lead": {
+            "type": "string",
+            "description": "Company domain, name, or a pasted profile."
+          },
+          "criteria": {
+            "type": "string",
+            "description": "Your ICP, plain words — e.g. \"B2B SaaS, 20-200 employees, US, sells to finance teams\"."
+          }
+        },
+        "required": [
+          "lead",
+          "criteria"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_transcribe",
+      "title": "Transcription",
+      "description": "An audio recording → accurate text with speakers and paragraph timestamps. Meetings, calls, voice notes. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "audio": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "description": "Base64 audio."
+              },
+              "mimeType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "data",
+              "mimeType"
+            ],
+            "additionalProperties": false
+          },
+          "audioUrl": {
+            "type": "string"
+          },
+          "diarize": {
+            "type": "boolean",
+            "description": "Label speakers."
+          },
+          "language": {
+            "type": "string",
+            "description": "BCP-47 hint, e.g. \"en\"."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_memory",
+      "title": "Agent memory",
+      "description": "Store, search, and forget memories for your agents — semantic recall on your own namespace, no vector DB to run. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "store",
+              "search",
+              "forget"
+            ],
+            "description": "The operation."
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Your partition key — an agent id, a user id. Defaults to \"default\"."
+          },
+          "content": {
+            "type": "string",
+            "description": "store: the memory text."
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false,
+            "description": "store: attached metadata, returned on recall."
+          },
+          "query": {
+            "type": "string",
+            "description": "search: what to recall."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "search: max results."
+          },
+          "id": {
+            "type": "string",
+            "description": "forget: the memory id (or omit with namespace to wipe it)."
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_image",
+      "title": "Image generation",
+      "description": "A prompt → a production-ready image. Marketing visuals, product scenes, and consistent brand imagery. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "What to generate."
+          },
+          "style": {
+            "type": "string",
+            "description": "Style notes, e.g. \"editorial photography, warm light\"."
+          },
+          "aspectRatio": {
+            "type": "string",
+            "enum": [
+              "1:1",
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4"
+            ]
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_speak",
+      "title": "Text to speech",
+      "description": "Text → natural speech audio, ready to embed. Voice notes, IVR lines, narration. Costs credits from the account wallet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "voice": {
+            "type": "string",
+            "description": "Voice name; omit for the default narrator."
+          },
+          "pace": {
+            "type": "string",
+            "enum": [
+              "slow",
+              "normal",
+              "fast"
+            ]
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_account",
+      "title": "Account balance",
+      "description": "Get the authenticated account's credit balance.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "kynth_late_fee_rules",
+      "title": "US late-fee ceilings by state",
+      "description": "Look up the maximum late-fee/interest rate a US state allows on a commercial (B2B) invoice, with the statute cite. Statute-verified conservative safe floors. Free — costs no credits.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2,
+            "description": "Two-letter USPS state code (e.g. CA). Omit for all 51 rows."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ],
+  "prompts": [],
+  "resources": []
 }
