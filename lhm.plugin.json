@@ -1,0 +1,21 @@
+{
+  "identifier": "kyisaiah47-kynth-core",
+  "name": "Kynth Core",
+  "version": "0.5.0",
+  "author": "Kynth Studios",
+  "homepage": "https://api.kynth.studio",
+  "cloudEndpoint": "https://api.kynth.studio/mcp",
+  "description": "41 finished-job AI tools on one credit wallet: documents to schema-valid JSON, field extraction, PII redaction, contract review, triage, research, moderation, agent memory. Failed calls never burn credits.",
+  "tags": [
+    "mcp",
+    "modelcontextprotocol",
+    "document-parsing",
+    "invoice-ocr",
+    "receipt-ocr",
+    "bank-statement-parser",
+    "pii-redaction",
+    "contract-review",
+    "json-extraction",
+    "agent-tools"
+  ]
+}
