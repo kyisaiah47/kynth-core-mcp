@@ -73,7 +73,7 @@ const kynth = new KynthCore({
   baseUrl: process.env.KYNTH_BASE_URL || undefined,
 });
 
-const server = new McpServer({ name: "kynth-core", version: "0.3.0" });
+const server = new McpServer({ name: "kynth-core", version: "0.5.0" });
 
 /** Wrap an SDK call so any KynthError becomes a clean MCP tool error. */
 async function run<T>(fn: () => Promise<T>) {
@@ -571,6 +571,41 @@ server.registerTool(
     annotations: { title: "Account balance", ...ACCOUNT_TOOL },
   },
   () => run(() => kynth.account()),
+);
+
+// Free public dataset — no key, no credits. Served from api.kynth.studio.
+server.registerTool(
+  "kynth_late_fee_rules",
+  {
+    title: "US late-fee ceilings by state",
+    description:
+      "Look up the maximum late-fee/interest rate a US state allows on a commercial (B2B) invoice, with the statute cite. Statute-verified conservative safe floors. Free — costs no credits.",
+    inputSchema: {
+      state: z
+        .string()
+        .length(2)
+        .optional()
+        .describe("Two-letter USPS state code (e.g. CA). Omit for all 51 rows."),
+    },
+    annotations: { title: "US late-fee ceilings by state", ...ACCOUNT_TOOL },
+  },
+  (a) =>
+    run(async () => {
+      const res = await fetch("https://api.kynth.studio/public/late-fee-rules");
+      if (!res.ok) throw new Error("Dataset fetch failed (HTTP " + res.status + ")");
+      const data = (await res.json()) as {
+        verifiedAt: string;
+        rules: { code: string }[];
+      };
+      if (a.state) {
+        const rule = data.rules.find(
+          (r) => r.code.toUpperCase() === String(a.state).toUpperCase(),
+        );
+        if (!rule) throw new Error("Unknown state code: " + a.state);
+        return { verifiedAt: data.verifiedAt, rule };
+      }
+      return data;
+    }),
 );
 
 const transport = new StdioServerTransport();
